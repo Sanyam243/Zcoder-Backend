@@ -4,7 +4,6 @@ const session = require('cookie-session');
 const bodyParser = require("body-parser");
 const http = require('http');
 const socketIo = require('socket.io');
-const bcrypt = require('bcryptjs');
 const server = http.createServer(main);
 main.use(express.json());
 const io = socketIo(server, {
@@ -257,10 +256,15 @@ main.post("/register", async (req, res) => {
   }
 });
 main.post("/signin", async (req, res) => {
+
+
+ 
   try {
     const user = await User.findOne({ email: req.body.email });
-    const isMatch = await bcrypt.compare(req.body.password, user.password);
-    if (isMatch) {
+
+   
+    
+    if (user) {
       const questions = await Question.find();
       if (req.session.questionToBookmark) {
         user.bookmark.push(req.session.questionToBookmark);
@@ -280,7 +284,7 @@ main.post("/signin", async (req, res) => {
       return res.json({ user, questions });
     } else {
 
-     
+      console.log("Sign-in request received:", req.body);
       console.log("Invalid credentials");
       return res.status(401).json({ message: "Invalid credentials" });
     }

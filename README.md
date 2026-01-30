@@ -79,8 +79,7 @@ We welcome contributions from the community! To contribute to Zcoder, please fol
 
 ## Contact
 
-If you have any questions, suggestions, or feedback, feel free to contact us at sanyajain2240@gmail.com.
-
+If you have any questions, suggestions, or feedback, feel free to contact us at vaibhavjangid2111@gmail.com.
 Thank you for using Zcoder! Happy coding!
 
 ---

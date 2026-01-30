@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const main = express();
 const session = require('cookie-session');
@@ -7,9 +8,10 @@ const socketIo = require('socket.io');
 const bcrypt = require('bcryptjs');
 const server = http.createServer(main);
 main.use(express.json());
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 const io = socketIo(server, {
   cors: {
-    origin: 'https://zcoderstage.vercel.app',
+    origin: CORS_ORIGIN,
     methods: ['GET', 'POST']
   }
 });
@@ -18,7 +20,7 @@ const User = require("./user");
 const Question = require("./questionschema");
 const Messages = require("./messageModel");
 const Comment = require("./comment");
-
+const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
@@ -26,13 +28,13 @@ server.listen(PORT, () => {
 
 const cors = require('cors');
 main.use(cors({
-  origin: 'https://zcoderstage.vercel.app',
+  origin: CORS_ORIGIN,
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
 main.use(session({
-  secret: 'your-secret-key',
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: true
 }));
@@ -163,7 +165,6 @@ main.get("/friends", async (req, res) => {
 
 main.post("/questions", async (req, res) => {
   const userEmail = req.query.email;
-  //const userId = "5a9427648b0beebeb69579e7";
   const { title, link, topics ,solution} = req.body;
   const topicsArray = Array.isArray(topics) ? topics : [topics];
   const question = new Question({
@@ -183,7 +184,6 @@ main.post("/questions", async (req, res) => {
       
         const questions = await Question.find();
         return res.json({ user, questions });
-        //res.render("landing", { user, questions });
       
     }
   } catch (error) {
